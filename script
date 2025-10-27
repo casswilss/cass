@@ -84,7 +84,21 @@ local function toggleBaseplate()
 end
 
 toggleButton.MouseButton1Click:Connect(function()
-    game:GetService("VoiceChatService"):joinVoice()
+
+local TextChatService = game:GetService("TextChatService")
+local function SendChatMessage(message)
+    if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+        local textChannel = TextChatService.TextChannels.RBXGeneral
+        textChannel:SendAsync(message)
+    else
+        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(message, "All")
+    end
+end
+
+for i = 1, 3 do
+        SendChatMessage("Hi")
+    wait(1) -- waits 2 second between messages
+end
 end)
 
 -- Handle dragging logic for smoother dragging of the whole frame
